@@ -1,4 +1,4 @@
-import random
+import sys, pygame, random
 
 colours = ["black", "white", "blue", "green", "yellow", "red"]
 colours_str = ", ".join(colours)
@@ -50,15 +50,14 @@ def input_guess(answer):
 	guess = []
 	for l in answer:
 		inp = input("input colour: ")
-		if inp not in colours:
+		while inp not in colours:
 			inp = input("please type " + colours_str + ": ")
-		elif inp in colours:
-			guess.append(inp)
+		guess.append(inp)
 		
 	return guess
 
-#actual game code
 
+#actual game loop
 print("Welcome to mastermind, you will be asked to guess my sequence of 5 colours from: " + colours_str + " you have unlimited guesses.")
 
 pattern = generate_pattern_hard()
@@ -74,3 +73,4 @@ while pins != ["black", "black", "black", "black", "black"]:
 	
 print("congratulations you win!")
 
+#bug somwhere where not enough pins get returned from a guess sometimes.
