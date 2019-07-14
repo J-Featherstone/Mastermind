@@ -5,6 +5,7 @@ colour_dic = {"black": (0, 0, 0), "white": (255, 255, 255), "blue": (0, 0, 255),
 current_guess = []
 old_guess = []
 old_pins = []
+difficulty = 5
 
 size = width, height = 500, 800
 
@@ -27,10 +28,42 @@ def buttons():
 		if evento.type == pygame.MOUSEBUTTONDOWN:
 			mouse = pygame.mouse.get_pos()
 			if 495 > mouse[0] > 455 and len(colour_dic) * 50 + 45 > mouse[1] > 0:
-				while len(current_guess) < 5:
-					colour_ind = int(mouse[1] / 50)
+				#while len(current_guess) < difficulty:
+				colour_ind = int(mouse[1] / 50)
+				#print(colour_ind)
+				colour_pix = screen.get_at(mouse)
+				#print(colour_pix)
+				colour_name = ""
+				for colo, num in colour_dic.items():
+					if num == colour_pix:
+						colour_name = colo
+				#print(colour_name)
+				if colour_name != "":
+					current_guess.append(colour_name)
+				else:
+					break
+				#print(current_guess)
+				#pygame.draw.circle(screen, colour_pix, (len(current_guess) * 50 + 50, 50), 20)
+				draw_current_guess(current_guess)
+				pygame.display.update()
+					#what will it do if you click the background? maybe geometry based buttons are better than colour here.
 #get the nth colour in colour_dic and add it to current_guess. print current guess
 		
+def draw_current_guess(current_guess):
+	for k, colour in enumerate(current_guess):
+		if colour in colour_dic:
+			col_num = colour_dic.get(colour)
+			pygame.draw.circle(screen, col_num, (k * 50 + 150, height - 50 - (len(old_guess) * 50)), 20)
+			
+
+def undoer():
+	for evento in pygame.event.get():
+		if evento.type == pygame.MOUSEBUTTONDOWN:
+			mouse = pygame.mouse.get_pos()
+			if 200 < mouse[0] < 450 and 0 < mouse[1] <  50:
+				colour_pix = screen.get_at(mouse)
+				print(colour_pix)
+			
 
 screen = pygame.display.set_mode(size)
 
@@ -48,14 +81,22 @@ pygame.display.update()
 	
 
 while (1):
-	for evento in pygame.event.get():
+	#for evento in pygame.event.get():
 			#print(evento);
-		if evento.type == pygame.MOUSEBUTTONDOWN:
-			mouse = pygame.mouse.get_pos()
+		#if evento.type == pygame.MOUSEBUTTONDOWN:
+			#mouse = pygame.mouse.get_pos()
 			#if pygame.mouse.get_pos() >= (150,230):
-			if 450 + 50 > mouse[0] > 450 and 25 + 50 > mouse[1] > 25:
-				pygame.draw.circle(screen, (0, 0, 0), (50, 50), 20)
-				pygame.display.update()
+			#if 450 + 50 > mouse[0] > 450 and 25 + 50 > mouse[1] > 25:
+				#print(screen.get_at(mouse))
+				#pygame.draw.circle(screen, (0, 0, 0), (50, 50), 20)
+				#pygame.display.update()
+	while len(current_guess) < difficulty:			
+		undoer()
+	while 1 == 1:
+		buttons()
+	#while 1 == 1:	
+	
+	
 	#pygame.display.flip()
     
 	for event in pygame.event.get():
