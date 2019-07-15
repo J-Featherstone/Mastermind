@@ -46,6 +46,10 @@ def buttons():
 				#pygame.draw.circle(screen, colour_pix, (len(current_guess) * 50 + 50, 50), 20)
 				draw_current_guess(current_guess)
 				pygame.display.update()
+			elif 150 < mouse[0] < 450 and 730 - (len(old_guess) * 50)  < mouse[1] <  770 - (len(old_guess) * 50):
+				colour_pix = screen.get_at(mouse)
+				#print(colour_pix)
+				
 					#what will it do if you click the background? maybe geometry based buttons are better than colour here.
 #get the nth colour in colour_dic and add it to current_guess. print current guess
 		
@@ -63,6 +67,8 @@ def undoer():
 			if 200 < mouse[0] < 450 and 0 < mouse[1] <  50:
 				colour_pix = screen.get_at(mouse)
 				print(colour_pix)
+			else:
+				break
 			
 
 screen = pygame.display.set_mode(size)
@@ -91,9 +97,8 @@ while (1):
 				#pygame.draw.circle(screen, (0, 0, 0), (50, 50), 20)
 				#pygame.display.update()
 	while len(current_guess) < difficulty:			
-		undoer()
-	while 1 == 1:
 		buttons()
+		#undoer()
 	#while 1 == 1:	
 	
 	
