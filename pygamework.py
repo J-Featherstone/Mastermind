@@ -6,6 +6,7 @@ current_guess = []
 old_guess = []
 old_pins = []
 difficulty = 5
+guess = False
 
 size = width, height = 500, 800
 
@@ -39,7 +40,14 @@ def buttons():
 						colour_name = colo
 				#print(colour_name)
 				if colour_name != "":
-					current_guess.append(colour_name)
+					if "empty" in current_guess:
+						for k, c in enumerate(current_guess):
+							if c == "empty":
+								current_guess[k] = colour_name
+								break
+					elif len(current_guess) < difficulty:			
+						current_guess.append(colour_name)
+						colour_name = ""
 				else:
 					break
 				#print(current_guess)
@@ -49,6 +57,20 @@ def buttons():
 			elif 150 < mouse[0] < 450 and 730 - (len(old_guess) * 50)  < mouse[1] <  770 - (len(old_guess) * 50):
 				colour_pix = screen.get_at(mouse)
 				#print(colour_pix)
+				colour_name = ""
+				for colo, num in colour_dic.items():
+					if num == colour_pix:
+						colour_name = colo
+				if colour_name != "":
+					guess_ind = int((mouse[0] - 130) / 50)
+					current_guess[guess_ind] = "empty"
+				else:
+					break
+				print(current_guess)
+				draw_current_guess(current_guess)
+				pygame.display.update()
+				
+				
 				
 					#what will it do if you click the background? maybe geometry based buttons are better than colour here.
 #get the nth colour in colour_dic and add it to current_guess. print current guess
@@ -58,7 +80,8 @@ def draw_current_guess(current_guess):
 		if colour in colour_dic:
 			col_num = colour_dic.get(colour)
 			pygame.draw.circle(screen, col_num, (k * 50 + 150, height - 50 - (len(old_guess) * 50)), 20)
-			
+		elif colour == "empty":
+				pygame.draw.circle(screen, (255, 0, 255), (k * 50 + 150, height - 50 - (len(old_guess) * 50)), 20)
 
 def undoer():
 	for evento in pygame.event.get():
@@ -96,10 +119,13 @@ while (1):
 				#print(screen.get_at(mouse))
 				#pygame.draw.circle(screen, (0, 0, 0), (50, 50), 20)
 				#pygame.display.update()
-	while len(current_guess) < difficulty:			
+	while guess == False:
+		if len(current_guess) == difficulty and "empty" not in current_guess:
+			pygame.draw.rect(screen, (0, 255, 0), (430, 750, 60, 40))
+		else:
+			pygame.draw.rect(screen, (255, 0, 0), (430, 750, 60, 40))			
 		buttons()
-		#undoer()
-	#while 1 == 1:	
+		
 	
 	
 	#pygame.display.flip()
