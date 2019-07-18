@@ -1,8 +1,10 @@
+import mastermind
 import pygame, sys
 pygame.init()
 
 colour_dic = {"black": (0, 0, 0), "white": (255, 255, 255), "blue": (0, 0, 255), "green": (0, 255, 0), "yellow": (255, 255, 0), "red": (255, 0, 0)}
 current_guess = []
+current_pins = []
 old_guess = []
 old_pins = []
 difficulty = 5
@@ -24,7 +26,7 @@ def present_colours():
 			pygame.draw.circle(screen, num, (x, count * 50 + 25), 20)
 			count += 1
 
-def buttons():
+def buttons(current_guess, current_pins, old_pins, old_guess, pattern):
 	for evento in pygame.event.get():
 		if evento.type == pygame.MOUSEBUTTONDOWN:
 			mouse = pygame.mouse.get_pos()
@@ -54,7 +56,8 @@ def buttons():
 				#pygame.draw.circle(screen, colour_pix, (len(current_guess) * 50 + 50, 50), 20)
 				draw_current_guess(current_guess)
 				pygame.display.update()
-			elif 150 < mouse[0] < 450 and 730 - (len(old_guess) * 50)  < mouse[1] <  770 - (len(old_guess) * 50):
+			
+			elif 150 < mouse[0] < 450 and 730 - (len(old_guess) * 50)  < mouse[1] <  740 - (len(old_guess) * 50):
 				colour_pix = screen.get_at(mouse)
 				#print(colour_pix)
 				colour_name = ""
@@ -70,10 +73,21 @@ def buttons():
 				draw_current_guess(current_guess)
 				pygame.display.update()
 				
+			elif 400 < mouse[0] < 490 and 740 < mouse[1] < 790:
+				if screen.get_at(mouse) == (0, 255, 0):
+					print(current_guess)
+					old_guess.append(current_guess)
+					current_guess = []
+					current_pins = mastermind.check_guess(pattern, current_guess)
+					print(current_pins)
+					old_pins.append(current_pins)
+					current_pins = []
+					draw_old(old_guess, old_pins)
+					print(old_guess)
+					print(old_pins)
+					#print(current_guess)
+					pygame.display.update()
 				
-				
-					#what will it do if you click the background? maybe geometry based buttons are better than colour here.
-#get the nth colour in colour_dic and add it to current_guess. print current guess
 		
 def draw_current_guess(current_guess):
 	for k, colour in enumerate(current_guess):
@@ -82,6 +96,19 @@ def draw_current_guess(current_guess):
 			pygame.draw.circle(screen, col_num, (k * 50 + 150, height - 50 - (len(old_guess) * 50)), 20)
 		elif colour == "empty":
 				pygame.draw.circle(screen, (255, 0, 255), (k * 50 + 150, height - 50 - (len(old_guess) * 50)), 20)
+
+
+def draw_old(old_guess, old_pins):
+	for l, guess in enumerate(old_guess):
+		for s, col in enumerate(guess):
+			col_num = colour_dic.get(col)
+			pygame.draw.circle(screen, col_num, (s * 50 + 150, height - 50 - (l * 50)), 20)
+			
+	for l, pins in enumerate(old_pins):
+		for k, colour in enumerate(pins):	
+			col_num = colour_dic.get(colour)
+			pygame.draw.circle(screen, col_num, (k * 25 + 10, height - 50 -(l * 50)), 10)
+	
 
 def undoer():
 	for evento in pygame.event.get():
@@ -107,24 +134,20 @@ pygame.display.update()
 
 #pygame.display.flip()
 
-	
+pattern = mastermind.generate_pattern_hard()
+print(pattern)	
 
 while (1):
-	#for evento in pygame.event.get():
-			#print(evento);
-		#if evento.type == pygame.MOUSEBUTTONDOWN:
-			#mouse = pygame.mouse.get_pos()
-			#if pygame.mouse.get_pos() >= (150,230):
-			#if 450 + 50 > mouse[0] > 450 and 25 + 50 > mouse[1] > 25:
-				#print(screen.get_at(mouse))
-				#pygame.draw.circle(screen, (0, 0, 0), (50, 50), 20)
-				#pygame.display.update()
+
+	#print(pattern)
+
 	while guess == False:
 		if len(current_guess) == difficulty and "empty" not in current_guess:
-			pygame.draw.rect(screen, (0, 255, 0), (430, 750, 60, 40))
+			pygame.draw.rect(screen, (0, 255, 0), (400, 740, 90, 50))
+			buttons(current_guess, current_pins, old_pins, old_guess, pattern)
 		else:
-			pygame.draw.rect(screen, (255, 0, 0), (430, 750, 60, 40))			
-		buttons()
+			pygame.draw.rect(screen, (255, 0, 0), (400, 740, 90, 50))			
+		buttons(current_guess, current_pins, old_pins, old_guess, pattern)
 		
 	
 	
