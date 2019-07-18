@@ -58,7 +58,7 @@ def input_guess(answer):
 
 
 #actual game loop
-'''print("Welcome to mastermind, you will be asked to guess my sequence of 5 colours from: " + colours_str + " you have unlimited guesses.")
+print("Welcome to mastermind, you will be asked to guess my sequence of 5 colours from: " + colours_str + " you have unlimited guesses.")
 
 pattern = generate_pattern_hard()
 
@@ -71,6 +71,6 @@ while pins != ["black", "black", "black", "black", "black"]:
 	print(guess)
 	print(pins)
 	
-print("congratulations you win!")'''
+print("congratulations you win!")
 
 #bug somwhere where not enough pins get returned from a guess sometimes.
