@@ -71,7 +71,7 @@ def buttons(current_guess, old_pins, old_guess, pattern):
 		if evento.type == pygame.MOUSEBUTTONDOWN:
 			mouse = pygame.mouse.get_pos()
 			if 495 > mouse[0] > 455 and len(colour_dic) * 50 + 45 > mouse[1] > 0:
-				#while len(current_guess) < difficulty:
+				#print(current_guess)
 				colour_ind = int(mouse[1] / 50)
 				#print(colour_ind)
 				colour_pix = screen.get_at(mouse)
@@ -97,7 +97,7 @@ def buttons(current_guess, old_pins, old_guess, pattern):
 				draw_current_guess(current_guess)
 				pygame.display.update()
 			
-			elif 150 < mouse[0] < 450 and 730 - (len(old_guess) * 50)  < mouse[1] <  740 - (len(old_guess) * 50):
+			elif 150 < mouse[0] < 450 and 720 - (len(old_guess) * 50)  < mouse[1] <  740 - (len(old_guess) * 50):
 				colour_pix = screen.get_at(mouse)
 				#print(colour_pix)
 				colour_name = ""
@@ -118,16 +118,29 @@ def buttons(current_guess, old_pins, old_guess, pattern):
 					#print(current_guess)
 					old_guess.append(current_guess)
 					
-					print(current_guess)
-					current_pins = check_guess(pattern, current_guess)
-					print(current_pins)
-					old_pins.append(current_pins)
-					current_pins = []
-					current_guess = []
-					draw_old(old_guess, old_pins)
-					print(old_guess)
-					print(old_pins)
 					#print(current_guess)
+					current_pins = check_guess(pattern, current_guess)
+					draw_current_pins(current_pins)
+					#print(current_pins)
+					if current_pins == ["black", "black", "black", "black", "black"]:
+						pygame.quit()
+						print("you win!")
+					#print(current_pins)
+					#print(current_guess)
+					old_pins.append(current_pins)
+					#print(old_pins)
+					#draw_old(old_guess, old_pins)
+					new_list = []
+					new_list2 = []
+					#current_guess = new_list
+					#current_pins = new_list2
+					current_pins.clear()
+					current_guess.clear()
+
+					#print(old_guess)
+					#print(old_pins)
+					#print(current_guess)
+					pygame.draw.rect(screen, (255, 0, 0), (400, 740, 90, 50))
 					pygame.display.update()
 				
 		
@@ -138,6 +151,11 @@ def draw_current_guess(current_guess):
 			pygame.draw.circle(screen, col_num, (k * 50 + 150, height - 50 - (len(old_guess) * 50)), 20)
 		elif colour == "empty":
 				pygame.draw.circle(screen, (255, 0, 255), (k * 50 + 150, height - 50 - (len(old_guess) * 50)), 20)
+
+def draw_current_pins(current_pins):
+	for l, pins in enumerate(current_pins):
+		col_num = colour_dic.get(pins)
+		pygame.draw.circle(screen, col_num, (l * 25 + 10, height - (len(old_guess) * 50)), 10)
 
 
 def draw_old(old_guess, old_pins):
@@ -171,17 +189,16 @@ print(pattern)
 while (1):
 
 	#print(pattern)
-
-	while guess == False:
+	while guess == False:	
 		if len(current_guess) == difficulty and "empty" not in current_guess:
+			
+			#buttons(current_guess, old_pins, old_guess, pattern)
 			pygame.draw.rect(screen, (0, 255, 0), (400, 740, 90, 50))
-			buttons(current_guess, old_pins, old_guess, pattern)
+			pygame.display.update()
 		else:
 			pygame.draw.rect(screen, (255, 0, 0), (400, 740, 90, 50))			
 		buttons(current_guess, old_pins, old_guess, pattern)
-		
-	
-	
+	#while old_pins[-1] != ["black", "black", "black", "black", "black"]:	
 	#pygame.display.flip()
     
 	for event in pygame.event.get():
