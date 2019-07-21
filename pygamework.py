@@ -70,9 +70,10 @@ def buttons(current_guess, old_pins, old_guess, pattern):
 	for evento in pygame.event.get():
 		if evento.type == pygame.MOUSEBUTTONDOWN:
 			mouse = pygame.mouse.get_pos()
+			#add new guess pins if there is space
 			if 495 > mouse[0] > 455 and len(colour_dic) * 50 + 45 > mouse[1] > 0:
 				colour_ind = int(mouse[1] / 50)
-				colour_pix = screen.get_at(mouse))
+				colour_pix = screen.get_at(mouse)
 				colour_name = ""
 				for colo, num in colour_dic.items():
 					if num == colour_pix:
@@ -90,8 +91,8 @@ def buttons(current_guess, old_pins, old_guess, pattern):
 					break
 				draw_current_guess(current_guess)
 				pygame.display.update()
-			
-			elif 150 < mouse[0] < 450 and 720 - (len(old_guess) * 50)  < mouse[1] <  740 - (len(old_guess) * 50):
+			#get rid of guess pins that have been placed
+			elif 150 < mouse[0] < 450 and 730 - (len(old_guess) * 50)  < mouse[1] <  770 - (len(old_guess) * 50):
 				colour_pix = screen.get_at(mouse)
 				colour_name = ""
 				for colo, num in colour_dic.items():
@@ -105,7 +106,7 @@ def buttons(current_guess, old_pins, old_guess, pattern):
 				print(current_guess)
 				draw_current_guess(current_guess)
 				pygame.display.update()
-				
+			#click the green button to check what you've guessed against the anwser	
 			elif 400 < mouse[0] < 490 and 740 < mouse[1] < 790:
 				if screen.get_at(mouse) == (0, 255, 0):
 					old_guess.append(current_guess)
